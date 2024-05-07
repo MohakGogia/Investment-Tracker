@@ -19,4 +19,10 @@
         Sold = 1,
         Matured = 2
     }
+
+    public enum SortOrder
+    {
+        Ascending = 1,
+        Descending = -1,
+    }
 }

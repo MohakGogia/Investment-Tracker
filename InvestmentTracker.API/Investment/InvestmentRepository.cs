@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using InvestmentTracker.API.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvestmentTracker.API.Investment
 {
     public interface IInvestmentRepository
     {
         Task<IEnumerable<Investment>> GetInvestmentsAsync();
-        Task<Investment> GetInvestmentByIdAsync(int id);
+        Task<IEnumerable<Investment>> GetInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate);
+        Task<Investment?> GetInvestmentByIdAsync(int id);
         Task AddInvestmentAsync(Investment investment);
         Task UpdateInvestmentAsync(Investment investment);
         Task DeleteInvestmentAsync(int id);
@@ -25,7 +27,76 @@ namespace InvestmentTracker.API.Investment
             return await _context.Investments.ToListAsync();
         }
 
-        public async Task<Investment> GetInvestmentByIdAsync(int id)
+        public async Task<IEnumerable<Investment>> GetInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate)
+        {
+            var query = _context.Investments.AsQueryable();
+            query = query.Where(i => i.PurchasedDate >= fromDate && i.PurchasedDate <= toDate);
+
+            if (filterParameter.FilterColumn != null && filterParameter.FilterValue != null)
+            {
+                switch (filterParameter.FilterColumn.ToLower())
+                {
+                    case "description":
+                        query = query.Where(i => i.Description.Contains(filterParameter.FilterValue.ToString()));
+                        break;
+                    case "amount":
+                        if (decimal.TryParse(filterParameter.FilterValue.ToString(), out var amount))
+                        {
+                            query = query.Where(i => i.Amount == amount);
+                        }
+                        break;
+                    case "investmentType":
+                        if (Enum.TryParse(filterParameter.FilterValue.ToString(), true, out InvestmentType type))
+                        {
+                            query = query.Where(i => i.Type == type);
+                        }
+                        break;
+                    case "purchasedDate":
+                        if (DateTime.TryParse(filterParameter.FilterValue.ToString(), out DateTime purchasedDate))
+                        {
+                            query = query.Where(i => i.PurchasedDate == purchasedDate);
+                        }
+                        break;
+                    case "status":
+                        if (Enum.TryParse(filterParameter.FilterValue.ToString(), true, out InvestmentStatus status))
+                        {
+                            query = query.Where(i => i.Status == status);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filterParameter.SortField))
+            {
+                switch (filterParameter.SortField.ToLower())
+                {
+                    case "amount":
+                        query = filterParameter.SortOrder == Core.SortOrder.Ascending ? query.OrderBy(i => i.Amount) : query.OrderByDescending(i => i.Amount);
+                        break;
+                    case "investmentType":
+                        query = filterParameter.SortOrder == Core.SortOrder.Ascending ? query.OrderBy(i => i.Type) : query.OrderByDescending(i => i.Type);
+                        break;
+                    case "purchasedDate":
+                        query = filterParameter.SortOrder == Core.SortOrder.Ascending ? query.OrderBy(i => i.PurchasedDate) : query.OrderByDescending(i => i.PurchasedDate);
+                        break;
+                    case "status":
+                        query = filterParameter.SortOrder == Core.SortOrder.Ascending ? query.OrderBy(i => i.Status) : query.OrderByDescending(i => i.Status);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            query = query.Skip((filterParameter.PageNumber - 1) * filterParameter.PageSize).Take(filterParameter.PageSize);
+
+            var investments = await query.ToListAsync();
+
+            return investments;
+        }
+
+        public async Task<Investment?> GetInvestmentByIdAsync(int id)
         {
             return await _context.Investments.FindAsync(id);
         }
@@ -53,5 +124,4 @@ namespace InvestmentTracker.API.Investment
             }
         }
     }
-
 }

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using InvestmentTracker.API.Core;
 
 namespace InvestmentTracker.API.Investment
 {
     public interface IInvestmentService
     {
         Task<IEnumerable<InvestmentDTO>> GetInvestmentsAsync();
+        Task<IEnumerable<InvestmentDTO>> GetInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate);
         Task<InvestmentDTO> GetInvestmentByIdAsync(int id);
         Task AddInvestmentAsync(InvestmentDTO investment);
         Task UpdateInvestmentAsync(InvestmentDTO investment);
@@ -26,6 +28,12 @@ namespace InvestmentTracker.API.Investment
         {
             var investments = await _repository.GetInvestmentsAsync();
             return _mapper.Map<IEnumerable<InvestmentDTO>>(investments);
+        }
+
+        public async Task<IEnumerable<InvestmentDTO>> GetInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate)
+        {
+            var pagedData = await _repository.GetInvestments(filterParameter, fromDate, toDate);
+            return _mapper.Map<IEnumerable<InvestmentDTO>>(pagedData);
         }
 
         public async Task<InvestmentDTO> GetInvestmentByIdAsync(int id)
@@ -51,5 +59,4 @@ namespace InvestmentTracker.API.Investment
             await _repository.DeleteInvestmentAsync(id);
         }
     }
-
 }

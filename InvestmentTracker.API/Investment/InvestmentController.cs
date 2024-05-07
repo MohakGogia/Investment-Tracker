@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using InvestmentTracker.API.Core;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InvestmentTracker.API.Investment
 {
@@ -30,6 +31,14 @@ namespace InvestmentTracker.API.Investment
             }
             return Ok(investment);
         }
+
+        [HttpPost("search")]
+        public async Task<ActionResult<IEnumerable<InvestmentDTO>>> GetInvestments([FromBody] FilterParameter filterParameter, 
+            DateTime fromDate, DateTime toDate)
+        {
+            return Ok(await _service.GetInvestments(filterParameter, fromDate, toDate));
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> AddInvestment(InvestmentDTO investment)
