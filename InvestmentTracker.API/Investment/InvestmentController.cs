@@ -15,9 +15,9 @@ namespace InvestmentTracker.API.Investment
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<InvestmentDTO>>> GetInvestments()
+        public async Task<ActionResult<IEnumerable<InvestmentDTO>>> GetInvestments([FromQuery] DateTime? fromDate = null, [FromQuery] DateTime? toDate = null)
         {
-            var investments = await _service.GetInvestmentsAsync();
+            var investments = await _service.GetInvestmentsAsync(fromDate, toDate);
             return Ok(investments);
         }
 
@@ -33,10 +33,10 @@ namespace InvestmentTracker.API.Investment
         }
 
         [HttpPost("search")]
-        public async Task<ActionResult<IEnumerable<InvestmentDTO>>> GetInvestments([FromBody] FilterParameter filterParameter, 
+        public async Task<ActionResult<IEnumerable<InvestmentDTO>>> SearchInvestments([FromBody] FilterParameter filterParameter, 
             DateTime fromDate, DateTime toDate)
         {
-            return Ok(await _service.GetInvestments(filterParameter, fromDate, toDate));
+            return Ok(await _service.SearchInvestments(filterParameter, fromDate, toDate));
         }
 
 

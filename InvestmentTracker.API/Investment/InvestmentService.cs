@@ -5,8 +5,8 @@ namespace InvestmentTracker.API.Investment
 {
     public interface IInvestmentService
     {
-        Task<IEnumerable<InvestmentDTO>> GetInvestmentsAsync();
-        Task<IEnumerable<InvestmentDTO>> GetInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate);
+        Task<IEnumerable<InvestmentDTO>> GetInvestmentsAsync(DateTime? fromDate = null, DateTime? toDate = null);
+        Task<IEnumerable<InvestmentDTO>> SearchInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate);
         Task<InvestmentDTO> GetInvestmentByIdAsync(int id);
         Task AddInvestmentAsync(InvestmentDTO investment);
         Task UpdateInvestmentAsync(InvestmentDTO investment);
@@ -24,15 +24,15 @@ namespace InvestmentTracker.API.Investment
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<InvestmentDTO>> GetInvestmentsAsync()
+        public async Task<IEnumerable<InvestmentDTO>> GetInvestmentsAsync(DateTime? fromDate = null, DateTime? toDate = null)
         {
-            var investments = await _repository.GetInvestmentsAsync();
+            var investments = await _repository.GetInvestmentsAsync(fromDate, toDate);
             return _mapper.Map<IEnumerable<InvestmentDTO>>(investments);
         }
 
-        public async Task<IEnumerable<InvestmentDTO>> GetInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<InvestmentDTO>> SearchInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate)
         {
-            var pagedData = await _repository.GetInvestments(filterParameter, fromDate, toDate);
+            var pagedData = await _repository.SearchInvestments(filterParameter, fromDate, toDate);
             return _mapper.Map<IEnumerable<InvestmentDTO>>(pagedData);
         }
 

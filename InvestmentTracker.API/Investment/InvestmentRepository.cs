@@ -5,8 +5,8 @@ namespace InvestmentTracker.API.Investment
 {
     public interface IInvestmentRepository
     {
-        Task<IEnumerable<Investment>> GetInvestmentsAsync();
-        Task<IEnumerable<Investment>> GetInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate);
+        Task<IEnumerable<Investment>> GetInvestmentsAsync(DateTime? fromDate = null, DateTime? toDate = null);
+        Task<IEnumerable<Investment>> SearchInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate);
         Task<Investment?> GetInvestmentByIdAsync(int id);
         Task AddInvestmentAsync(Investment investment);
         Task UpdateInvestmentAsync(Investment investment);
@@ -22,12 +22,17 @@ namespace InvestmentTracker.API.Investment
             _context = context;
         }
 
-        public async Task<IEnumerable<Investment>> GetInvestmentsAsync()
+        public async Task<IEnumerable<Investment>> GetInvestmentsAsync(DateTime? fromDate = null, DateTime? toDate = null)
         {
-            return await _context.Investments.ToListAsync();
+            fromDate ??= DateTime.MinValue;
+            toDate ??= DateTime.UtcNow;
+
+            return await _context.Investments
+                .Where(i => i.PurchasedDate >= fromDate && i.PurchasedDate <= toDate)
+                .ToListAsync();
         }
 
-        public async Task<IEnumerable<Investment>> GetInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<Investment>> SearchInvestments(FilterParameter filterParameter, DateTime fromDate, DateTime toDate)
         {
             var query = _context.Investments.AsQueryable();
             query = query.Where(i => i.PurchasedDate >= fromDate && i.PurchasedDate <= toDate);
