@@ -66,8 +66,8 @@ export default function PieChart({
 	return (
 		<div className='size-96'>
 			{investmentsData?.length === 0 ? (
-				<div className='text-center text-xl text-red-500'>
-					No data available in this time range
+				<div className='text-center text-xl text-red-400 p-4 bg-red-100 rounded-lg shadow-md'>
+					No data available in this date range
 				</div>
 			) : (
 				<Chart type='pie' data={chartData} options={chartOptions} />

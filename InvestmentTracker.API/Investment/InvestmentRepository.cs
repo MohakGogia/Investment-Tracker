@@ -108,6 +108,8 @@ namespace InvestmentTracker.API.Investment
 
         public async Task AddInvestmentAsync(Investment investment)
         {
+            investment.CreatedOn = DateTime.UtcNow;
+            investment.ModifiedOn = DateTime.UtcNow;
             _context.Investments.Add(investment);
             await _context.SaveChangesAsync();
         }

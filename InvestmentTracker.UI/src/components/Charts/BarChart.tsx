@@ -71,8 +71,8 @@ export default function BarChart({
 	return (
 		<div className='flex justify-center mt-8'>
 			{investmentsData?.length === 0 ? (
-				<div className='text-center text-xl text-red-500'>
-					No data available in this year
+				<div className='text-center text-xl text-red-400 p-4 bg-red-100 rounded-lg shadow-md'>
+					No data available for this year
 				</div>
 			) : (
 				<Chart

@@ -8,8 +8,8 @@ import { useFetch } from './hooks/useFetch';
 import apiService from './http/api-service';
 import { Investment } from '../models/investment';
 import { Nullable } from 'primereact/ts-helpers';
-import { AxiosResponse } from 'axios';
 import { Button } from 'primereact/button';
+import { AxiosResponse } from 'axios';
 
 const today = new Date();
 const oneYearAgo = new Date();
@@ -68,25 +68,25 @@ const TimeRangeChart = () => {
 				<Button
 					label='Fetch'
 					onClick={fetchData}
-					className='border-solid border-2 border-gray-500 p-2'
+					className='border-solid border-2 border-gray-500 p-2 hover:bg-gray-800 hover:text-white'
 				/>
 			</div>
 			<div className='chart-display flex justify-center w-full'>
 				<div className='chart-card bg-white p-8 rounded-xl shadow-lg m-4'>
 					{isFetching ? (
-						<p className='text-center'>Loading...</p>
+						<p className='text-center text-xl text-blue-500 p-4 bg-blue-100 rounded-lg shadow-md'>Loading...</p>
 					) : (
 						data && <PieChart investmentsData={data} />
 					)}
-					{error && <p className='text-center'>{error}</p>}
+					{error && <p className='text-center text-xl text-red-500 p-4 bg-red-100 rounded-lg shadow-md'>{error}</p>}
 				</div>
 				<div className='chart-card bg-white p-8 rounded-xl shadow-lg m-4'>
 					{isFetching ? (
-						<p className='text-center'>Loading...</p>
+						<p className='text-center text-xl text-blue-500 p-4 bg-blue-100 rounded-lg shadow-md'>Loading...</p>
 					) : (
 						data && <DoughnutChart investmentsData={data} />
 					)}
-					{error && <p className='text-center'>{error}</p>}
+					{error && <p className='text-center text-xl text-red-500 p-4 bg-red-100 rounded-lg shadow-md'>{error}</p>}
 				</div>
 			</div>
 		</div>
@@ -134,11 +134,11 @@ const YearChart = () => {
 			</div>
 			<div className='chart-card bg-white p-12 rounded-lg shadow-lg m-4'>
 				{isFetching ? (
-					<p className='text-center'>Loading...</p>
+					<p className='text-center text-xl text-blue-500 p-4 bg-blue-100 rounded-lg shadow-md'>Loading...</p>
 				) : (
 					data && <BarChart investmentsData={data} />
 				)}
-				{error && <p className='text-center'>{error}</p>}
+				{error && <p className='text-center text-xl text-red-500 p-4 bg-red-100 rounded-lg shadow-md'>{error}</p>}
 			</div>
 		</div>
 	);
