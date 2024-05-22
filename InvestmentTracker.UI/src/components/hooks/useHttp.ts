@@ -7,7 +7,7 @@ interface FetchState<T> {
   error: string | null;
 }
 
-export function useFetch<T>(fetchFn: () => Promise<AxiosResponse<T>>, initialValue: T | null) {
+export function useHttp<T>(apiFn: () => Promise<AxiosResponse<T>>, initialValue: T | null) {
   const [state, setState] = useState<FetchState<T>>({
     isFetching: false,
     data: initialValue,
@@ -15,18 +15,18 @@ export function useFetch<T>(fetchFn: () => Promise<AxiosResponse<T>>, initialVal
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const sendHttpCall = async () => {
       setState((prevState) => ({ ...prevState, isFetching: true }));
       try {
-        const response = await fetchFn();
+        const response = await apiFn();
         setState({ isFetching: false, data: response.data, error: null });
       } catch (error) {
         setState({ isFetching: false, data: null, error: 'Something went wrong' });
       }
     };
 
-    fetchData();
-  }, [fetchFn]);
+    sendHttpCall();
+  }, [apiFn]);
 
   return {
     isFetching: state.isFetching,

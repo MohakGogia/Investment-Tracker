@@ -4,7 +4,7 @@ import DoughnutChart from './Charts/DoughnutChart';
 import PieChart from './Charts/PieChart';
 import { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
-import { useFetch } from './hooks/useFetch';
+import { useHttp } from './hooks/useHttp';
 import apiService from './http/api-service';
 import { Investment } from '../models/investment';
 import { Nullable } from 'primereact/ts-helpers';
@@ -41,7 +41,7 @@ const TimeRangeChart = () => {
 	const [apiFunc, setApiFunc] = useState(
 		() => () => fetchInvestments(oneYearAgo, today)
 	);
-	const { isFetching, data, error } = useFetch(apiFunc, []);
+	const { isFetching, data, error } = useHttp(apiFunc, []);
 
 	function onDatesChange(e: any) {
 		setDates(e.value);
@@ -103,7 +103,7 @@ const YearChart = () => {
 				new Date(date.getFullYear(), 11, 31)
 			)
 	);
-	const { isFetching, data, error } = useFetch(apiFunc, []);
+	const { isFetching, data, error } = useHttp(apiFunc, []);
 
 	function handleYearChange(e: any) {
 		setDate(e.value as Date);
