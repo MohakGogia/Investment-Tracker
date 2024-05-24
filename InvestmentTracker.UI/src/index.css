@@ -1,5 +1,36 @@
-@import "primereact/resources/themes/tailwind-light/theme.css";
+@import 'primereact/resources/themes/tailwind-light/theme.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-datatable .p-datatable-wrapper {
+	border: 1px solid #ccc;
+}
+
+.custom-datatable .p-datatable-thead > tr > th,
+.custom-datatable .p-datatable-tbody > tr > td {
+	border: 1px solid #ddd;
+}
+
+.custom-datatable .p-datatable-tbody > tr:nth-child(odd) {
+	background-color: #f9f9f9;
+}
+
+.custom-datatable .p-datatable-tbody > tr:nth-child(even) {
+	background-color: #fff;
+}
+
+.custom-datatable .p-datatable-header,
+.custom-datatable .p-datatable-footer {
+	background-color: #f1f1f1;
+	color: #333;
+}
+
+.custom-datatable .p-sortable-column {
+	color: #555;
+}
+
+.custom-datatable .p-sortable-column.p-highlight {
+	color: #000;
+}
