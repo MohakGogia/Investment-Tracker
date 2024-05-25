@@ -1,4 +1,6 @@
 @import 'primereact/resources/themes/tailwind-light/theme.css';
+@import 'primereact/resources/primereact.min.css';
+@import 'primeicons/primeicons.css';
 
 @tailwind base;
 @tailwind components;
@@ -33,4 +35,21 @@
 
 .custom-datatable .p-sortable-column.p-highlight {
 	color: #000;
+}
+
+.confirm-popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1000;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	background-color: #fff;
+}
+.confirm-popup .p-dialog-footer {
+	display: flex;
+	justify-content: center;
+	padding: 1rem 0;
 }

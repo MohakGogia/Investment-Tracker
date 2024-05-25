@@ -4,15 +4,7 @@ import apiService from './http/api-service';
 import { Toast } from 'primereact/toast';
 import { useRef, useState } from 'react';
 import { ProgressSpinner } from 'primereact/progressspinner';
-
-type IFormInput = {
-	amount: number;
-	type: InvestmentType;
-	purchasedDate: Date;
-	sellDate?: Date | null;
-	description?: string;
-	status: InvestmentStatus;
-};
+import { IFormInput } from '../models/form-model';
 
 const saveInvestment = (investmentData: IFormInput) => {
 	const data = {
