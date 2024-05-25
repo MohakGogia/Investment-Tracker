@@ -8,10 +8,13 @@ import { Tag } from 'primereact/tag';
 import { InvestmentStatus, InvestmentType } from '../core/enums';
 import { FilterMatchMode } from 'primereact/api';
 import { Button } from 'primereact/button';
+import { FloatLabel } from 'primereact/floatlabel';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import { Toast } from 'primereact/toast';
 import EditInvestmentDialog from './EditInvestmentDialog';
 import { IFormInput } from '../models/form-model';
+import { Nullable } from 'primereact/ts-helpers';
+import { Calendar } from 'primereact/calendar';
 
 const today = new Date();
 const oneYearAgo = new Date();
@@ -43,7 +46,7 @@ const getSeverity = (status: number) => {
 };
 
 const columns = [
-	{ field: 'amount', header: 'Amount', width: '15%', filter: true, filterPlaceholder: 'Search' },
+	{ field: 'amount', header: 'Amount', width: '10%', filter: true, filterPlaceholder: 'Search' },
 	{ field: 'type', header: 'Investment Type', width: '10%', filter: true, filterPlaceholder: 'Search' },
 	{ field: 'status', header: 'Investment Status', width: '5%', filter: true, filterPlaceholder: 'Search' },
 	{ field: 'purchasedDate', header: 'Purchase Date', width: '10%', filter: true, filterPlaceholder: 'Search' },
@@ -67,6 +70,8 @@ export default function Grid() {
 	const [visible, setVisible] = useState(false);
 	const toast = useRef<Toast>(null);
 	const [selectedInvestment, setSelectedInvestment] = useState<Investment | null>(null);
+	const [startDate, setStartDate] = useState<Nullable<Date>>(oneYearAgo);
+	const [endDate, setEndDate] = useState<Nullable<Date>>(today);
 
 	useEffect(() => {
 		(async () => {
@@ -103,9 +108,29 @@ export default function Grid() {
 		}
 	};
 
+	const handleInvestmentsDataFetch = async () => {
+		if (startDate === null || endDate === null) {
+			return;
+		}
+		const res = await fetchInvestments(startDate as Date, endDate as Date);
+		setInvestments(res.data);
+	}
+
 	const header = (
-		<div className='flex flex-wrap align-items-center justify-content-between'>
+		<div className='flex flex-wrap align-items-center justify-content-between m-2'>
 			<span className='text-xl text-900 font-bold mb-2'>Investment Data</span>
+			<div className='flex items-center space-x-4 ml-96'>
+				<FloatLabel>
+					<Calendar inputId="start_date" value={startDate} onChange={(e) => setStartDate(e.value)} dateFormat="dd/mm/yy" showIcon showButtonBar/>
+					<label htmlFor="start_date">Start Date</label>
+				</FloatLabel>
+				<span>-</span>
+				<FloatLabel>
+					<Calendar inputId="end_date" value={endDate} onChange={(e) => setEndDate(e.value)} dateFormat="dd/mm/yy" showIcon showButtonBar/>
+					<label htmlFor="end_date">End Date</label>
+				</FloatLabel>
+				<Button label="Fetch" onClick={handleInvestmentsDataFetch} className='p-button-primary' />
+			</div>
 		</div>
 	);
 
