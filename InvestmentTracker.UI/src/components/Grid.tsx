@@ -72,6 +72,7 @@ export default function Grid() {
 	const [selectedInvestment, setSelectedInvestment] = useState<Investment | null>(null);
 	const [startDate, setStartDate] = useState<Nullable<Date>>(oneYearAgo);
 	const [endDate, setEndDate] = useState<Nullable<Date>>(today);
+	const [isloading, setIsLoading] = useState<boolean>(false);
 
 	useEffect(() => {
 		(async () => {
@@ -112,8 +113,10 @@ export default function Grid() {
 		if (startDate === null || endDate === null) {
 			return;
 		}
+		setIsLoading(true);
 		const res = await fetchInvestments(startDate as Date, endDate as Date);
 		setInvestments(res.data);
+		setIsLoading(false);
 	}
 
 	const header = (
@@ -129,7 +132,12 @@ export default function Grid() {
 					<Calendar inputId="end_date" value={endDate} onChange={(e) => setEndDate(e.value)} dateFormat="dd/mm/yy" showIcon showButtonBar/>
 					<label htmlFor="end_date">End Date</label>
 				</FloatLabel>
-				<Button label="Fetch" onClick={handleInvestmentsDataFetch} className='p-button-primary' />
+				<Button 
+					label="Fetch"
+					icon="pi pi-search"
+					onClick={handleInvestmentsDataFetch} 
+					loading={isloading} 
+					className='border-solid border-2 border-gray-500 p-2 hover:bg-gray-800 hover:text-white' />
 			</div>
 		</div>
 	);

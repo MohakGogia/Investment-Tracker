@@ -55,15 +55,13 @@ const EditInvestmentDialog: React.FC<EditInvestmentDialogProps> = ({
 		<div>
 			<Button
 				label='Cancel'
-				icon='pi pi-times'
 				onClick={() => onHide()}
-				className='p-button-text'
+				className='p-button-text text-red-400'
 			/>
 			<Button
 				label='Save'
-				icon='pi pi-check'
 				onClick={handleSubmit(handleEditInvestmentSave)}
-				className='px-6'
+				className='ml-6 text-gray-900'
 				autoFocus
 			/>
 		</div>

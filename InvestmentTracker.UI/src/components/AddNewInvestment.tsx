@@ -66,152 +66,157 @@ const AddNewInvestment: React.FC = () => {
 		<div className='max-w-md mx-auto my-10 p-8 shadow-2xl rounded-2xl border-red-100 border-2'>
 			<Toast ref={toast} />
 			<h2 className='text-2xl font-bold mb-6'>Add New Investment</h2>
-			{isLoading ? (
-				<div className='card flex justify-content-center'>
-					<ProgressSpinner />
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className='mb-4'>
+					<label className='block text-gray-700'>
+						Amount<span className='text-red-500'>*</span>
+					</label>
+					<input
+						type='text'
+						{...register('amount', {
+							required: 'Amount is required',
+							pattern: {
+								value: /^\d+(\.\d{1,2})?$/,
+								message:
+									'Invalid amount format. Should be a number with up to 2 decimal places',
+							},
+						})}
+						className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
+					/>
+					{errors.amount && (
+						<p className='text-red-500 text-sm mt-1'>{errors.amount.message}</p>
+					)}
 				</div>
-			) : (
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<div className='mb-4'>
-						<label className='block text-gray-700'>
-							Amount<span className='text-red-500'>*</span>
-						</label>
-						<input
-							type='text'
-							{...register('amount', {
-								required: 'Amount is required',
-								pattern: {
-									value: /^\d+(\.\d{1,2})?$/,
-									message:
-										'Invalid amount format. Should be a number with up to 2 decimal places',
-								},
-							})}
-							className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
-						/>
-						{errors.amount && (
-							<p className='text-red-500 text-sm mt-1'>
-								{errors.amount.message}
-							</p>
-						)}
-					</div>
 
-					<div className='mb-4'>
-						<label className='block text-gray-700'>
-							Investment Type<span className='text-red-500'>*</span>
-						</label>
-						<select
-							{...register('type', { required: 'Investment type is required' })}
-							className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
+				<div className='mb-4'>
+					<label className='block text-gray-700'>
+						Investment Type<span className='text-red-500'>*</span>
+					</label>
+					<select
+						{...register('type', { required: 'Investment type is required' })}
+						className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
+					>
+						<option value=''>Select</option>
+						{Object.keys(InvestmentType)
+							.filter((key) => isNaN(Number(key)))
+							.map((key) => (
+								<option
+									key={key}
+									value={InvestmentType[key as keyof typeof InvestmentType]}
+								>
+									{key}
+								</option>
+							))}
+					</select>
+					{errors.type && (
+						<p className='text-red-500 text-sm mt-1'>{errors.type.message}</p>
+					)}
+				</div>
+
+				<div className='mb-4'>
+					<label className='block text-gray-700'>
+						Purchase Date<span className='text-red-500'>*</span>
+					</label>
+					<input
+						type='date'
+						{...register('purchasedDate', {
+							required: 'Purchase date is required',
+						})}
+						className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
+					/>
+					{errors.purchasedDate && (
+						<p className='text-red-500 text-sm mt-1'>
+							{errors.purchasedDate.message}
+						</p>
+					)}
+				</div>
+
+				<div className='mb-4'>
+					<label className='block text-gray-700'>Sell Date</label>
+					<input
+						type='date'
+						{...register('sellDate')}
+						className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
+					/>
+					{errors.sellDate && (
+						<p className='text-red-500 text-sm mt-1'>
+							{errors.sellDate.message}
+						</p>
+					)}
+				</div>
+
+				<div className='mb-4'>
+					<label className='block text-gray-700'>Description / Note</label>
+					<textarea
+						{...register('description')}
+						className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
+					></textarea>
+					{errors.description && (
+						<p className='text-red-500 text-sm mt-1'>
+							{errors.description.message}
+						</p>
+					)}
+				</div>
+
+				<div className='mb-4'>
+					<label className='block text-gray-700'>
+						Investment Status<span className='text-red-500'>*</span>
+					</label>
+					<select
+						{...register('status', {
+							required: 'Investment status is required',
+						})}
+						className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
+					>
+						{Object.keys(InvestmentStatus)
+							.filter((key) => isNaN(Number(key)))
+							.map((key) => (
+								<option
+									key={key}
+									value={InvestmentStatus[key as keyof typeof InvestmentStatus]}
+								>
+									{key}
+								</option>
+							))}
+					</select>
+					{errors.status && (
+						<p className='text-red-500 text-sm mt-1'>{errors.status.message}</p>
+					)}
+				</div>
+
+				<div className='flex justify-between'>
+					<button
+						type='submit'
+						disabled={isLoading}
+						className={`px-4 py-2 rounded-md text-white focus:outline-none focus:ring ${
+							isLoading
+								? 'bg-gray-400 cursor-not-allowed'
+								: 'bg-gray-800 hover:bg-gray-500 focus:ring-blue-300'
+						}`}>
+						Save
+					</button>
+					{isLoading && (
+						<div className='flex items-center'>
+							<ProgressSpinner
+								style={{ width: '30px', height: '30px' }}
+								animationDuration='0.4s'
+							/>
+						</div>
+					)}
+					<button
+						type='button'
+						onClick={() => reset()}
+						disabled={isLoading}
+						className={`px-4 py-2 rounded-md text-white focus:outline-none focus:ring ${
+							isLoading
+								? 'bg-red-200 cursor-not-allowed'
+								: 'bg-red-800 hover:bg-red-500 focus:ring-gray-300'
+						}`}
 						>
-							<option value=''>Select</option>
-							{Object.keys(InvestmentType)
-								.filter((key) => isNaN(Number(key)))
-								.map((key) => (
-									<option
-										key={key}
-										value={InvestmentType[key as keyof typeof InvestmentType]}
-									>
-										{key}
-									</option>
-								))}
-						</select>
-						{errors.type && (
-							<p className='text-red-500 text-sm mt-1'>{errors.type.message}</p>
-						)}
-					</div>
-
-					<div className='mb-4'>
-						<label className='block text-gray-700'>
-							Purchase Date<span className='text-red-500'>*</span>
-						</label>
-						<input
-							type='date'
-							{...register('purchasedDate', {
-								required: 'Purchase date is required',
-							})}
-							className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
-						/>
-						{errors.purchasedDate && (
-							<p className='text-red-500 text-sm mt-1'>
-								{errors.purchasedDate.message}
-							</p>
-						)}
-					</div>
-
-					<div className='mb-4'>
-						<label className='block text-gray-700'>Sell Date</label>
-						<input
-							type='date'
-							{...register('sellDate')}
-							className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
-						/>
-						{errors.sellDate && (
-							<p className='text-red-500 text-sm mt-1'>
-								{errors.sellDate.message}
-							</p>
-						)}
-					</div>
-
-					<div className='mb-4'>
-						<label className='block text-gray-700'>Description / Note</label>
-						<textarea
-							{...register('description')}
-							className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
-						></textarea>
-						{errors.description && (
-							<p className='text-red-500 text-sm mt-1'>
-								{errors.description.message}
-							</p>
-						)}
-					</div>
-
-					<div className='mb-4'>
-						<label className='block text-gray-700'>
-							Investment Status<span className='text-red-500'>*</span>
-						</label>
-						<select
-							{...register('status', {
-								required: 'Investment status is required',
-							})}
-							className='w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500'
-						>
-							{Object.keys(InvestmentStatus)
-								.filter((key) => isNaN(Number(key)))
-								.map((key) => (
-									<option
-										key={key}
-										value={
-											InvestmentStatus[key as keyof typeof InvestmentStatus]
-										}
-									>
-										{key}
-									</option>
-								))}
-						</select>
-						{errors.status && (
-							<p className='text-red-500 text-sm mt-1'>
-								{errors.status.message}
-							</p>
-						)}
-					</div>
-
-					<div className='flex justify-between'>
-						<button
-							type='submit'
-							className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300'
-						>
-							Save
-						</button>
-						<button
-							type='button'
-							onClick={() => reset()}
-							className='bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300'
-						>
-							Reset
-						</button>
-					</div>
-				</form>
-			)}
+						Reset
+					</button>
+				</div>
+			</form>
 		</div>
 	);
 };
