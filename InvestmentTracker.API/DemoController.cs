@@ -44,7 +44,7 @@ namespace InvestmentTracker.API
                 CreatedOn = DateTimeOffset.UtcNow,
                 ModifiedOn = DateTimeOffset.UtcNow,
                 Amount = random.Next(100, 10000),
-                Type = (InvestmentType)random.Next(0, 8),
+                Type = (InvestmentType)random.Next(0, 9),
                 PurchasedDate = DateTime.UtcNow.AddDays(-random.Next(1, 365)),
                 SellDate = random.Next(0, 2) == 1 ? DateTime.UtcNow : null,
                 Description = LoremNET.Lorem.Words(5),

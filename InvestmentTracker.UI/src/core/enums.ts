@@ -7,7 +7,8 @@ export enum InvestmentType {
   ETF = 5,
   CorporateBond = 6,
   REIT = 7,
-  Crypto = 8
+  Crypto = 8,
+  IPO = 9
 }
 
 export enum InvestmentStatus {
