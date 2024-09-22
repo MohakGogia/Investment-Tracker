@@ -6,12 +6,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
+	margin-right: 0.5rem;
+}
+
 .custom-datatable .p-datatable-wrapper {
 	border: 1px solid #ccc;
 }
 
-.custom-datatable .p-datatable-thead > tr > th,
-.custom-datatable .p-datatable-tbody > tr > td {
+.custom-datatable .p-datatable-thead > tr > th, .custom-datatable .p-datatable-tbody > tr > td {
 	border: 1px solid #ddd;
 }
 
@@ -23,8 +26,7 @@
 	background-color: #fff;
 }
 
-.custom-datatable .p-datatable-header,
-.custom-datatable .p-datatable-footer {
+.custom-datatable .p-datatable-header, .custom-datatable .p-datatable-footer {
 	background-color: #f1f1f1;
 	color: #333;
 }
@@ -48,6 +50,7 @@
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	background-color: #fff;
 }
+
 .confirm-popup .p-dialog-footer {
 	display: flex;
 	justify-content: center;

@@ -142,9 +142,7 @@ export default function Grid() {
 		</div>
 	);
 
-	const footer = `In total there are ${
-		investments ? investments.length : 0
-	} records.`;
+	const footer = `In total there are ${investments ? investments.length : 0} records.`;
 
 	const edit = (data: Investment) => {
 		setSelectedInvestment(data);
@@ -201,12 +199,12 @@ export default function Grid() {
 			const response = await apiService.put(`/Investment/${selectedInvestment!.id}`, data);
 			if (response.status === 204) {
 				showToastMsg('success', 'Success', 'Investment modified successfully!');
-				setInvestments((investmentList) => {
+				setInvestments((investmentList: Investment[]) => {
 					const oldInvestment = investmentList.find((inv) => inv.id === selectedInvestment!.id);
 	
 					return investmentList.map((inv) => {
 						if (inv.id === oldInvestment!.id) {
-							return { ...oldInvestment, ...data };
+							return { ...oldInvestment, ...data, createdOn: new Date(), modifiedOn: new Date(), duration: 1 };
 						}
 						return inv;
 					})
@@ -263,6 +261,7 @@ export default function Grid() {
 				emptyMessage='No data found'
 				className='custom-datatable'
 				filters={filters}
+				loading={isloading}
 				filterDisplay='row'
 				header={header}
 				footer={footer}

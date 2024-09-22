@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PrimeReactProvider } from 'primereact/api';
 import BarChart from './Charts/BarChart';
 import DoughnutChart from './Charts/DoughnutChart';
@@ -61,8 +62,10 @@ const TimeRangeChart = () => {
 						onChange={onDatesChange}
 						selectionMode='range'
 						dateFormat='dd/mm/yy'
-						readOnlyInput
 						className='text-center border-solid border-b-2 border-black'
+						readOnlyInput
+						hideOnRangeSelection
+						showButtonBar
 					/>
 				</div>
 				<Button

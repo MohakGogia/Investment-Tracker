@@ -44,6 +44,7 @@ export default function DoughnutChart({
 			options: {
 				responsive: false,
 				display: true,
+				maintainAspectRatio: false
 			},
 		};
 

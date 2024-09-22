@@ -39,6 +39,7 @@ export default function BarChart({
 			options: {
 				responsive: false,
 				display: true,
+				maintainAspectRatio: false
 			},
 		};
 

@@ -4,6 +4,7 @@ import { InvestmentType } from '../../core/enums';
 import { Investment } from '../../models/investment';
 import { CHART_COLORS } from '../../core/color-coding';
 import { ChartData } from '../../models/chart-models';
+import { formatName } from '../../utility/utils';
 
 export default function PieChart({
 	investmentsData,
@@ -21,7 +22,7 @@ export default function PieChart({
 		const hoverColors: string[] = [];
 
 		pieChartData.forEach((element, index) => {
-			labels.push(`${element.name} (${element.percentage}%)`);
+			labels.push(`${formatName(element.name)} (${element.percentage}%)`);
 			dataObj.push(element.amount);
 			bgColors.push(CHART_COLORS[index].color);
 			hoverColors.push(CHART_COLORS[index].hoverColor);
@@ -42,6 +43,7 @@ export default function PieChart({
 			options: {
 				responsive: false,
 				display: true,
+				maintainAspectRatio: false
 			},
 		};
 

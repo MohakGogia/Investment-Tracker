@@ -5,7 +5,7 @@ export enum InvestmentType {
   Stocks = 3,
   SGB = 4,
   ETF = 5,
-  CorporateBond = 6,
+  CorporateBonds = 6,
   REIT = 7,
   Crypto = 8,
   IPO = 9
