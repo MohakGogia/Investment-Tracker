@@ -6,7 +6,7 @@ import { AxiosResponse } from 'axios';
 import apiService from './http/api-service';
 import { Tag } from 'primereact/tag';
 import { InvestmentStatus, InvestmentType } from '../core/enums';
-import { FilterMatchMode } from 'primereact/api';
+import { FilterMatchMode, SortOrder } from 'primereact/api';
 import { Button } from 'primereact/button';
 import { FloatLabel } from 'primereact/floatlabel';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
@@ -15,7 +15,9 @@ import EditInvestmentDialog from './EditInvestmentDialog';
 import { IFormInput } from '../models/form-model';
 import { Nullable } from 'primereact/ts-helpers';
 import { Calendar } from 'primereact/calendar';
+import { InvestmentTypeLabels } from '../utility/utils';
 
+const defaultSort = { field: 'purchasedDate', order: SortOrder.DESC };
 const today = new Date();
 const oneYearAgo = new Date();
 oneYearAgo.setFullYear(today.getFullYear() - 1);
@@ -46,13 +48,55 @@ const getSeverity = (status: number) => {
 };
 
 const columns = [
-	{ field: 'amount', header: 'Amount', width: '10%', filter: true, filterPlaceholder: 'Search' },
-	{ field: 'type', header: 'Investment Type', width: '10%', filter: true, filterPlaceholder: 'Search' },
-	{ field: 'status', header: 'Investment Status', width: '5%', filter: true, filterPlaceholder: 'Search' },
-	{ field: 'purchasedDate', header: 'Purchase Date', width: '10%', filter: true, filterPlaceholder: 'Search' },
-	{ field: 'sellDate', header: 'Selling Date', width: '10%', filter: true, filterPlaceholder: 'Search' },
-	{ field: 'duration', header: 'Holding Period', width: '10%', filter: true, filterPlaceholder: 'Search' },
-	{ field: 'description', header: 'Description', width: '5%', filter: true, filterPlaceholder: 'Search' },
+	{
+		field: 'amount',
+		header: 'Amount',
+		width: '10%',
+		filter: true,
+		filterPlaceholder: 'Search',
+	},
+	{
+		field: 'type',
+		header: 'Investment Type',
+		width: '10%',
+		filter: true,
+		filterPlaceholder: 'Search',
+	},
+	{
+		field: 'status',
+		header: 'Investment Status',
+		width: '5%',
+		filter: true,
+		filterPlaceholder: 'Search',
+	},
+	{
+		field: 'purchasedDate',
+		header: 'Purchase Date',
+		width: '10%',
+		filter: true,
+		filterPlaceholder: 'Search',
+	},
+	{
+		field: 'sellDate',
+		header: 'Selling Date',
+		width: '10%',
+		filter: true,
+		filterPlaceholder: 'Search',
+	},
+	{
+		field: 'duration',
+		header: 'Holding Period',
+		width: '10%',
+		filter: true,
+		filterPlaceholder: 'Search',
+	},
+	{
+		field: 'description',
+		header: 'Description',
+		width: '5%',
+		filter: true,
+		filterPlaceholder: 'Search',
+	},
 ];
 
 const filters = {
@@ -69,7 +113,8 @@ export default function Grid() {
 	const [investments, setInvestments] = useState<Investment[]>([]);
 	const [visible, setVisible] = useState(false);
 	const toast = useRef<Toast>(null);
-	const [selectedInvestment, setSelectedInvestment] = useState<Investment | null>(null);
+	const [selectedInvestment, setSelectedInvestment] =
+		useState<Investment | null>(null);
 	const [startDate, setStartDate] = useState<Nullable<Date>>(oneYearAgo);
 	const [endDate, setEndDate] = useState<Nullable<Date>>(today);
 	const [isloading, setIsLoading] = useState<boolean>(false);
@@ -86,7 +131,10 @@ export default function Grid() {
 			case 'amount':
 				return `₹ ${rowData.amount}`;
 			case 'type':
-				return `${InvestmentType[rowData.type]}`;
+				const typeKey = InvestmentType[
+					rowData.type
+				] as keyof typeof InvestmentType;
+				return InvestmentTypeLabels[typeKey];
 			case 'status':
 				return (
 					<Tag
@@ -117,39 +165,59 @@ export default function Grid() {
 		const res = await fetchInvestments(startDate as Date, endDate as Date);
 		setInvestments(res.data);
 		setIsLoading(false);
-	}
+	};
 
 	const header = (
 		<div className='flex flex-wrap align-items-center justify-content-between m-2'>
 			<span className='text-xl text-900 font-bold mb-2'>Investment Data</span>
 			<div className='flex items-center space-x-4 ml-96'>
 				<FloatLabel>
-					<Calendar inputId="start_date" value={startDate} onChange={(e) => setStartDate(e.value)} dateFormat="dd/mm/yy" showIcon showButtonBar/>
-					<label htmlFor="start_date">Start Date</label>
+					<Calendar
+						inputId='start_date'
+						value={startDate}
+						onChange={(e) => setStartDate(e.value)}
+						dateFormat='dd/mm/yy'
+						showIcon
+						showButtonBar
+					/>
+					<label htmlFor='start_date'>Start Date</label>
 				</FloatLabel>
 				<span>-</span>
 				<FloatLabel>
-					<Calendar inputId="end_date" value={endDate} onChange={(e) => setEndDate(e.value)} dateFormat="dd/mm/yy" showIcon showButtonBar/>
-					<label htmlFor="end_date">End Date</label>
+					<Calendar
+						inputId='end_date'
+						value={endDate}
+						onChange={(e) => setEndDate(e.value)}
+						dateFormat='dd/mm/yy'
+						showIcon
+						showButtonBar
+					/>
+					<label htmlFor='end_date'>End Date</label>
 				</FloatLabel>
-				<Button 
-					label="Fetch"
-					icon="pi pi-search"
-					onClick={handleInvestmentsDataFetch} 
-					loading={isloading} 
-					className='border-solid border-2 border-gray-500 p-2 hover:bg-gray-800 hover:text-white' />
+				<Button
+					label='Fetch'
+					icon='pi pi-search'
+					onClick={handleInvestmentsDataFetch}
+					loading={isloading}
+					className='border-solid border-2 border-gray-500 p-2 hover:bg-gray-800 hover:text-white'
+				/>
 			</div>
 		</div>
 	);
 
-	const footer = `In total there are ${investments ? investments.length : 0} records.`;
+	const footer = `In total there are ${
+		investments ? investments.length : 0
+	} records.`;
 
 	const edit = (data: Investment) => {
 		setSelectedInvestment(data);
 		setVisible(true);
 	};
 
-	const confirmDelete = (data: Investment, event: React.MouseEvent<HTMLElement>) => {
+	const confirmDelete = (
+		data: Investment,
+		event: React.MouseEvent<HTMLElement>
+	) => {
 		confirmPopup({
 			target: event.currentTarget,
 			message: 'Do you want to delete this record?',
@@ -165,7 +233,7 @@ export default function Grid() {
 		await apiService.delete(`Investment/${id}`);
 		setInvestments((prevInv) => {
 			return prevInv.filter((inv) => inv.id !== id);
-		})
+		});
 		toast.current?.show({
 			severity: 'success',
 			summary: 'Successful',
@@ -177,8 +245,20 @@ export default function Grid() {
 	const actionBodyTemplate = (rowData: Investment) => {
 		return (
 			<>
-				<Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => edit(rowData)} />
-				<Button icon="pi pi-trash" rounded outlined severity="danger" onClick={(event) => confirmDelete(rowData, event)} />
+				<Button
+					icon='pi pi-pencil'
+					rounded
+					outlined
+					className='mr-2'
+					onClick={() => edit(rowData)}
+				/>
+				<Button
+					icon='pi pi-trash'
+					rounded
+					outlined
+					severity='danger'
+					onClick={(event) => confirmDelete(rowData, event)}
+				/>
 			</>
 		);
 	};
@@ -196,21 +276,36 @@ export default function Grid() {
 			status: Number(updatedInvestment.status),
 		};
 		try {
-			const response = await apiService.put(`/Investment/${selectedInvestment!.id}`, data);
+			const response = await apiService.put(
+				`/Investment/${selectedInvestment!.id}`,
+				data
+			);
 			if (response.status === 204) {
 				showToastMsg('success', 'Success', 'Investment modified successfully!');
 				setInvestments((investmentList: Investment[]) => {
-					const oldInvestment = investmentList.find((inv) => inv.id === selectedInvestment!.id);
-	
+					const oldInvestment = investmentList.find(
+						(inv) => inv.id === selectedInvestment!.id
+					);
+
 					return investmentList.map((inv) => {
 						if (inv.id === oldInvestment!.id) {
-							return { ...oldInvestment, ...data, createdOn: new Date(), modifiedOn: new Date(), duration: 1 };
+							return {
+								...oldInvestment,
+								...data,
+								createdOn: new Date(),
+								modifiedOn: new Date(),
+								duration: 1,
+							};
 						}
 						return inv;
-					})
+					});
 				});
 			} else {
-				showToastMsg('error', 'Error', 'Failed to edit investment. Please try again later.');
+				showToastMsg(
+					'error',
+					'Error',
+					'Failed to edit investment. Please try again later.'
+				);
 			}
 		} catch (exception) {
 			showToastMsg(
@@ -251,18 +346,19 @@ export default function Grid() {
 				resizableColumns
 				paginator
 				scrollable
-				removableSort
 				scrollHeight='500px'
-				rows={20}
-				rowsPerPageOptions={[10, 20, 50, 100]}
+				filterDisplay='row'
 				columnResizeMode='expand'
 				size='small'
 				tableStyle={{ minWidth: '30rem' }}
 				emptyMessage='No data found'
 				className='custom-datatable'
+				rows={20}
+				rowsPerPageOptions={[10, 20, 50, 100]}
+				sortField={defaultSort.field}
+				sortOrder={defaultSort.order}
 				filters={filters}
 				loading={isloading}
-				filterDisplay='row'
 				header={header}
 				footer={footer}
 			>
@@ -284,7 +380,12 @@ export default function Grid() {
 						sortable
 					/>
 				))}
-				<Column body={actionBodyTemplate} exportable={false} style={{ width: '5%' }}></Column>
+				<Column
+					field='actions'
+					header='Actions'
+					body={actionBodyTemplate}
+					style={{ width: '5%' }}
+				></Column>
 			</DataTable>
 		</div>
 	);

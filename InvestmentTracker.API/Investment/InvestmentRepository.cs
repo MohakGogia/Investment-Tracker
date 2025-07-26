@@ -29,6 +29,7 @@ namespace InvestmentTracker.API.Investment
 
             return await _context.Investments
                 .Where(i => i.PurchasedDate >= fromDate && i.PurchasedDate <= toDate)
+                .OrderByDescending(i => i.PurchasedDate)
                 .ToListAsync();
         }
 

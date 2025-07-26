@@ -8,6 +8,7 @@ import { InvestmentStatus, InvestmentType } from '../core/enums';
 import { IFormInput } from '../models/form-model';
 import { Investment } from '../models/investment';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { InvestmentTypeLabels } from '../utility/utils';
 
 type EditInvestmentDialogProps = {
 	visible: boolean;
@@ -112,7 +113,7 @@ const EditInvestmentDialog: React.FC<EditInvestmentDialogProps> = ({
 									key={key}
 									value={InvestmentType[key as keyof typeof InvestmentType]}
 								>
-									{key}
+									{InvestmentTypeLabels[key as keyof typeof InvestmentType]}
 								</option>
 							))}
 					</select>

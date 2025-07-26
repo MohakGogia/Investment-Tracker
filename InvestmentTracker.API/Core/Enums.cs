@@ -11,7 +11,11 @@
         CorporateBonds = 6,
         REIT = 7,
         Crypto = 8,
-        IPO = 9
+        IPO = 9,
+        USStocks = 10,
+        PhysicalGold = 11,
+        DigitalGold = 12,
+        Silver = 13
     }
 
     public enum InvestmentStatus

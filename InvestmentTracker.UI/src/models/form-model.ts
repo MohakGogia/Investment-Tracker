@@ -4,7 +4,7 @@ export type IFormInput = {
 	amount: number;
 	type: InvestmentType;
 	purchasedDate: Date;
+	status: InvestmentStatus;
 	sellDate?: Date | null;
 	description?: string;
-	status: InvestmentStatus;
 };

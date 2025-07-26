@@ -9,6 +9,6 @@ export interface Investment {
   purchasedDate: Date;
   sellDate: Date | null;
   duration: number;
-  description?: string;
   status: InvestmentStatus;
+  description?: string;
 }

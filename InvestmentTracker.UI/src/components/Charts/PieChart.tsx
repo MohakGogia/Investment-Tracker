@@ -4,7 +4,7 @@ import { InvestmentType } from '../../core/enums';
 import { Investment } from '../../models/investment';
 import { CHART_COLORS } from '../../core/color-coding';
 import { ChartData } from '../../models/chart-models';
-import { formatName } from '../../utility/utils';
+import { formatName, InvestmentTypeLabelsShort } from '../../utility/utils';
 
 export default function PieChart({
 	investmentsData,
@@ -32,7 +32,7 @@ export default function PieChart({
 			labels: labels,
 			datasets: [
 				{
-					label: 'Amount (in ₹)',
+					label: ' Amount (in ₹)',
 					data: dataObj,
 					backgroundColor: bgColors,
 					hoverBackgroundColor: hoverColors,
@@ -43,7 +43,7 @@ export default function PieChart({
 			options: {
 				responsive: false,
 				display: true,
-				maintainAspectRatio: false
+				maintainAspectRatio: false,
 			},
 		};
 
@@ -99,7 +99,9 @@ function preparePieChartData(data: Investment[]): ChartData[] {
 				0
 			);
 			chartData.push({
-				name: InvestmentType[type],
+				name: InvestmentTypeLabelsShort[
+					InvestmentType[type] as keyof typeof InvestmentType
+				],
 				amount: groupAmount,
 				percentage: '',
 			});

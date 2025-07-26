@@ -30,7 +30,7 @@ export default function BarChart({
 			labels: labels,
 			datasets: [
 				{
-					label: 'Amount (in ₹)',
+					label: ' Amount (in ₹)',
 					data: dataObj,
 					backgroundColor: bgColors,
 					hoverBackgroundColor: hoverColors,
@@ -39,7 +39,7 @@ export default function BarChart({
 			options: {
 				responsive: false,
 				display: true,
-				maintainAspectRatio: false
+				maintainAspectRatio: false,
 			},
 		};
 

@@ -11,4 +11,6 @@ export const CHART_COLORS = [
   { color: 'rgba(102, 102, 255, 0.5)', hoverColor: 'rgb(102, 102, 255)', colorName: 'Blue' },
   { color: 'rgba(255, 102, 102, 0.5)', hoverColor: 'rgb(255, 102, 102)', colorName: 'Light Red' },
   { color: 'rgba(0, 0, 0, 0.5)', hoverColor: 'rgb(0, 0, 0)', colorName: 'Black' },
+  { color: 'rgba(128, 128, 128, 0.5)', hoverColor: 'rgb(128, 128, 128)', colorName: 'Gray' },
+  { color: 'rgba(255, 204, 153, 0.5)', hoverColor: 'rgb(255, 204, 153)', colorName: 'Peach' },
 ];

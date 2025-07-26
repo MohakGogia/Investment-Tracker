@@ -33,7 +33,7 @@ export default function DoughnutChart({
 			labels: labels,
 			datasets: [
 				{
-					label: 'Amount (in ₹)',
+					label: ' Amount (in ₹)',
 					data: dataObj,
 					backgroundColor: bgColors,
 					hoverBackgroundColor: hoverColors,
@@ -44,7 +44,7 @@ export default function DoughnutChart({
 			options: {
 				responsive: false,
 				display: true,
-				maintainAspectRatio: false
+				maintainAspectRatio: false,
 			},
 		};
 

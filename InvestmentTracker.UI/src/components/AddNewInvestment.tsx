@@ -5,6 +5,7 @@ import { Toast } from 'primereact/toast';
 import { useRef, useState } from 'react';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { IFormInput } from '../models/form-model';
+import { InvestmentTypeLabels } from '../utility/utils';
 
 const saveInvestment = (investmentData: IFormInput) => {
 	const data = {
@@ -104,7 +105,7 @@ const AddNewInvestment: React.FC = () => {
 									key={key}
 									value={InvestmentType[key as keyof typeof InvestmentType]}
 								>
-									{key}
+									{InvestmentTypeLabels[key as keyof typeof InvestmentType]}
 								</option>
 							))}
 					</select>
@@ -192,7 +193,8 @@ const AddNewInvestment: React.FC = () => {
 							isLoading
 								? 'bg-gray-400 cursor-not-allowed'
 								: 'bg-gray-800 hover:bg-gray-500 focus:ring-blue-300'
-						}`}>
+						}`}
+					>
 						Save
 					</button>
 					{isLoading && (
@@ -212,7 +214,7 @@ const AddNewInvestment: React.FC = () => {
 								? 'bg-red-200 cursor-not-allowed'
 								: 'bg-red-800 hover:bg-red-500 focus:ring-gray-300'
 						}`}
-						>
+					>
 						Reset
 					</button>
 				</div>
